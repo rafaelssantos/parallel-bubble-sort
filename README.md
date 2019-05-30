@@ -1,5 +1,5 @@
 <h1> Parallel bubble sort </h1>
-Parallel bubble sort versions on:
+<p> Parallel bubble sort versions on: </p>
 <ul>
   <li> CUDA </li>
   <li> MPI </li>
@@ -13,4 +13,4 @@ Parallel bubble sort versions on:
   <li> Qt 5.8 </li>
 </ul>
 
-In <em> src </em> folder, there is a Qt Creator project.
+<p> In <em> src </em> folder, there is a Qt Creator project. </p>
