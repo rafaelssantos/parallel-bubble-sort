@@ -1,5 +1,5 @@
-<h1> Parallel bubble sort </h1>
-<p> Parallel bubble sort versions on: </p>
+<h1> Parallel merge sort </h1>
+<p> Parallel merge sort versions on: </p>
 <ul>
   <li> CUDA </li>
   <li> MPI </li>

@@ -1,9 +1,10 @@
 QT       += core 
-TARGET = parallel-bubble-sort
+TARGET = parallel-merge-sort
 TEMPLATE = app
 
-DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += console c++11
+CONFIG -= app_bundle
+CONFIG -= qt
 
 
 
