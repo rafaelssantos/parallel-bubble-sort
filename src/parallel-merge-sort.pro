@@ -12,7 +12,7 @@ CONFIG -= qt
 # [CHANGE]
 # Add all source files, even cuda source files
 HEADERS += \
-    vectormanipulator.h
+    datamanipulator.h
    
 
 
@@ -21,8 +21,8 @@ HEADERS += \
 # Here, there is a trick in Qt Creator. 
 # CUDA files are after removed from SOURCES.
 SOURCES += \                                              
-    vectormanipulator.cpp \
-    main.cpp
+    main.cpp \
+    datamanipulator.cpp
    
 
 

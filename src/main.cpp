@@ -1,5 +1,6 @@
 #include <iostream>
-#include "vectormanipulator.h"
+#include <string>
+#include "datamanipulator.h"
 
 using namespace std;
 
@@ -9,18 +10,31 @@ using namespace std;
 int main() {
     int n = 10;
     int max = 100;
-    int* vector = nullptr;
+    int* input = nullptr;
+    int* output = nullptr;
+    string filePath = "/home/rafaelssantos/teste.txt";
 
-    cout << "Generating vector.............";
-    vector = VectorManipulator::instance().generateRandom(n, max);
-    cout << "OK\n";
+    cout << "Generating values .............";
+    input = DataManipulator::instance().generateRandom(n, max);
+    cout << "Done\n";
+    cout << "Saving values .................";
+    DataManipulator::instance().save(filePath, input, n);
+    cout << "Done\n";
 
-    cout << "Saving original vector........";
-    VectorManipulator::instance().save("/home/rafaelssantos/teste.txt", vector, n);
-    cout << "OK\n";
+    cout << "Reading values ................";
+    output = DataManipulator::instance().read(filePath, &n);
+    cout << "Done\n";
 
-    delete[] vector;
-    vector = nullptr;
+
+    cout << "\n\nINPUT:  ";
+    DataManipulator::instance().print(input, n);
+    cout << "\nOUTPUT: ";
+    DataManipulator::instance().print(output, n);
+
+    delete[] output;
+    input = nullptr;
+    delete[] input;
+    input = nullptr;
 
     cin.get();
     return 0;
