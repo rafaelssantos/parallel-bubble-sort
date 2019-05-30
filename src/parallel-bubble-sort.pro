@@ -11,6 +11,7 @@ CONFIG += console c++11
 # [CHANGE]
 # Add all source files, even cuda source files
 HEADERS += \
+    vectormanipulator.h
    
 
 
@@ -18,7 +19,9 @@ HEADERS += \
 # Add all source files, even cuda source files
 # Here, there is a trick in Qt Creator. 
 # CUDA files are after removed from SOURCES.
-SOURCES += \                                            
+SOURCES += \                                              
+    vectormanipulator.cpp \
+    main.cpp
    
 
 
