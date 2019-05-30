@@ -2,7 +2,7 @@
 
 #include <random>
 #include <iostream>
-
+#include <fstream>
 
 using namespace std;
 
@@ -109,6 +109,33 @@ void VectorManipulator::print(const float* vector, int n) {
     cout << vector[n - 1];
 
     cout << "]";
+}
+
+
+
+void VectorManipulator::save(string filePath, int* vector, int n) {
+    ofstream file(filePath);
+
+    for(auto i = 0; i < n - 1; i++){
+        file << vector[i] << "\n";
+    }
+    file << vector[n - 1];
+
+    file.close();
+}
+
+
+
+void VectorManipulator::save(string filePath, float* vector, int n) {
+    ofstream file(filePath);
+
+    for(auto i = 0; i < n - 1; i++){
+        file << vector[i] << "\n";
+    }
+    file << vector[n - 1];
+
+
+    file.close();
 }
 
 

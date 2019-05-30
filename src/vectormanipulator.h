@@ -1,6 +1,8 @@
 #ifndef VECTORMANIPULATOR_H
 #define VECTORMANIPULATOR_H
 
+#include <string>
+
 
 class VectorManipulator {
 public:
@@ -18,6 +20,9 @@ public:
 
     void print(const float* vector, int n);
 
+    void save(std::string filePath, int* vector, int n);
+
+    void save(std::string filePath, float* vector, int n);
 
 private:
     VectorManipulator();

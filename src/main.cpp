@@ -11,9 +11,14 @@ int main() {
     int max = 100;
     int* vector = nullptr;
 
+    cout << "Generating vector.............";
     vector = VectorManipulator::instance().generateRandom(n, max);
+    cout << "OK\n";
 
-    VectorManipulator::instance().print(vector, n);
+    cout << "Saving original vector........";
+    VectorManipulator::instance().save("/home/rafaelssantos/teste.txt", vector, n);
+    cout << "OK\n";
+
     delete[] vector;
     vector = nullptr;
 
