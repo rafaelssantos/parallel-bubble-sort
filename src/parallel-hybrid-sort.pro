@@ -1,5 +1,5 @@
-QT       += core 
-TARGET = parallel-merge-sort
+QT       += core
+TARGET = parallel-hybrid-sort
 TEMPLATE = app
 
 CONFIG += console c++11
@@ -12,18 +12,27 @@ CONFIG -= qt
 # [CHANGE]
 # Add all source files, even cuda source files
 HEADERS += \
-    datamanipulator.h
-   
+    sortalgorithm.h \
+    bubblesort.h \
+    valuesmanager.h \
+    sortmanager.h \
+    mergesort.h \
+    algorithmtype.h
+
 
 
 # [CHANGE]
 # Add all source files, even cuda source files
-# Here, there is a trick in Qt Creator. 
+# Here, there is a trick in Qt Creator.
 # CUDA files are after removed from SOURCES.
-SOURCES += \                                              
+SOURCES += \
     main.cpp \
-    datamanipulator.cpp
-   
+    bubblesort.cpp \
+    valuesmanager.cpp \
+    mergesort.cpp \
+    sortalgorithm.cpp \
+    sortmanager.cpp
+
 
 
 # [CHANGE]
@@ -44,23 +53,32 @@ SOURCES -= \
 # C++ compiler optimization flags
 QMAKE_CXXFLAGS_RELEASE += -O3
 
+
+
+# [OPENMP]
+# C++ Openmp compiler optimization flags
+QMAKE_CXXFLAGS+= -fopenmp
+QMAKE_LFLAGS +=  -fopenmp
+
+
+
 # [OPTIONAL]
 # Cuda installation path
 CUDA_DIR                = /usr/local/cuda
 
-# [CHANGE] 
+# [CHANGE]
 # Bits of operation system (32 or 64)
 SYSTEM_TYPE             = 64                            # '32' or '64', depending on your system
 
 # [CHANGE]
 # Type of CUDA architecture (Compute Capability)
-CUDA_ARCH               = sm_50                 
+CUDA_ARCH               = sm_50
 
 # [OPTIONAL]
 # nvcc compiler options
-NVCC_COMPILER_OPTIONS   = -Xptxas -O3 -use_fast_math    
+NVCC_COMPILER_OPTIONS   = -Xptxas -O3 -use_fast_math
 
-# [DON'T CHANGE] 
+# [DON'T CHANGE]
 # Cuda libraries
 CUDA_INC = $$join($$CUDA_DIR/include,'" -I"','-I"','"')
 CUDA_LIB_NAMES = cudart cuda
@@ -70,13 +88,13 @@ for(lib, CUDA_LIB_NAMES) {
 LIBS += $$CUDA_LIBS
 QMAKE_LIBDIR += $$CUDA_DIR/lib64
 
-# [DON'T CHANGE] 
+# [DON'T CHANGE]
 # Include path
 INCLUDEPATH += $$CUDA_DIR/include             # include paths
 
 
 
-# [DON'T CHANGE] 
+# [DON'T CHANGE]
 # Config cuda debug compilation
 CONFIG(debug, debug|release) {
     DESTDIR = debug
@@ -102,7 +120,7 @@ CONFIG(debug, debug|release) {
 }
 
 
-# [DON'T CHANGE] 
+# [DON'T CHANGE]
 # Config cuda release compilation
 else{
     DESTDIR = release
