@@ -18,7 +18,8 @@ HEADERS += \
     mergesort.h \
     hybridsort.h \
     sortalgorithm.h \
-    sortalgorithmtype.h
+    sortalgorithmtype.h \
+    logger.h
 
 
 
@@ -33,7 +34,8 @@ SOURCES += \
     mergesort.cpp \
     sortmanager.cpp \
     hybridsort.cpp \
-    sortalgorithm.cpp
+    sortalgorithm.cpp \
+    logger.cpp
 
 
 

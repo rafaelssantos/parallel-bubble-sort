@@ -1,17 +1,29 @@
 #include "valuesmanager.h"
 
+
+#include <cstring>
 #include <fstream>
 #include <iostream>
 #include <random>
 #include <vector>
 
+
+
 using namespace std;
+
+
+
+
 
 ValuesManager& ValuesManager::instance() {
 	static ValuesManager instance;
 
 	return instance;
 }
+
+
+
+
 
 int* ValuesManager::generateUniform(int n, int max) {
 	int* values = nullptr;
@@ -27,6 +39,10 @@ int* ValuesManager::generateUniform(int n, int max) {
 	return values;
 }
 
+
+
+
+
 int* ValuesManager::generatePoisson(int n, float mean) {
 	int* values = nullptr;
 
@@ -41,6 +57,10 @@ int* ValuesManager::generatePoisson(int n, float mean) {
 	return values;
 }
 
+
+
+
+
 int* ValuesManager::generateRandom(int n, int max) {
 	int* values = nullptr;
 
@@ -54,11 +74,26 @@ int* ValuesManager::generateRandom(int n, int max) {
 	return values;
 }
 
+
+
+
+
 void ValuesManager::print(const int* values, int n) {
 	for (auto i = 0; i < n; i++) {
 		cout << values[i] << "\n";
 	}
 }
+
+
+
+
+
+void ValuesManager::copy(int* destValues, const int* sourceValues, int n) {
+	memcpy(destValues, sourceValues, n * sizeof(int));
+}
+
+
+
 
 void ValuesManager::save(string filePath, int* values, int n) {
 	ofstream file(filePath);
@@ -70,6 +105,10 @@ void ValuesManager::save(string filePath, int* values, int n) {
 
 	file.close();
 }
+
+
+
+
 
 int* ValuesManager::read(string filePath, int* n) {
 	ifstream file(filePath);
@@ -94,8 +133,16 @@ int* ValuesManager::read(string filePath, int* n) {
 	return values;
 }
 
+
+
+
+
 ValuesManager::ValuesManager() {
 }
+
+
+
+
 
 ValuesManager::~ValuesManager() {
 }

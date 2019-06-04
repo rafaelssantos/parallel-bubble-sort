@@ -15,6 +15,8 @@ public:
 
 	void print(const int* values, int n);
 
+	void copy(int* destValues, const int* sourceValues, int n);
+
 	void save(std::string filePath, int* values, int n);
 
 	int* read(std::string filePath, int* n);
