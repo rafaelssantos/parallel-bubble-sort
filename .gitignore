@@ -2,3 +2,7 @@
 build-parallel-bubble-sort-Desktop-Release/
 
 src/parallel-bubble-sort\.pro\.user
+
+build-parallel-hybrid-sort-Desktop-Release/
+
+src/parallel-hybrid-sort\.pro\.user

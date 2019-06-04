@@ -8,14 +8,14 @@ BubbleSort::~BubbleSort() {
 
 void BubbleSort::sort(int* values, int n) {
 	bool swapOccurs = true;
-	bool tempValue;
+	int tempValue;
 
-	for (int i = 0; i < n - 1; i++) {
+	for (auto i = 0; i < n - 1; i++) {
 		if (!swapOccurs) {
 			break;
 		}
 		swapOccurs = false;
-		for (int j = 0; j < n - 1 - i; j++) {
+		for (auto j = 0; j < n - 1 - i; j++) {
 			if (values[j] > values[j + 1]) {
 				swapOccurs = true;
 				tempValue = values[j];

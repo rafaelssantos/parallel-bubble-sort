@@ -12,12 +12,13 @@ CONFIG -= qt
 # [CHANGE]
 # Add all source files, even cuda source files
 HEADERS += \
-    sortalgorithm.h \
     bubblesort.h \
     valuesmanager.h \
     sortmanager.h \
     mergesort.h \
-    algorithmtype.h
+    hybridsort.h \
+    sortalgorithm.h \
+    sortalgorithmtype.h
 
 
 
@@ -30,8 +31,9 @@ SOURCES += \
     bubblesort.cpp \
     valuesmanager.cpp \
     mergesort.cpp \
-    sortalgorithm.cpp \
-    sortmanager.cpp
+    sortmanager.cpp \
+    hybridsort.cpp \
+    sortalgorithm.cpp
 
 
 

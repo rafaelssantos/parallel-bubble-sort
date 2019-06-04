@@ -2,19 +2,22 @@
 
 
 #include "bubblesort.h"
+#include "hybridsort.h"
 #include "mergesort.h"
 
 
 
 
-
-void SortManager::sort(AlgorithmType sortType, int* values, int n) {
-	if (sortType == AlgorithmType::BUBBLE_SORT) {
+void SortManager::sort(SortAlgorithmType sortType, int* values, int n, int maxDepth) {
+	if (sortType == SortAlgorithmType::SERIAL_BUBBLE) {
 		BubbleSort sorter;
 		sorter.sort(values, n);
-	} else if (sortType == AlgorithmType::MERGE_SORT) {
+	} else if (sortType == SortAlgorithmType::SERIAL_MERGE) {
 		MergeSort sorter;
 		sorter.sort(values, n);
+	} else if (sortType == SortAlgorithmType::SERIAL_HYBRID) {
+		HybridSort sorter;
+		sorter.sort(values, n, maxDepth);
 	}
 }
 
