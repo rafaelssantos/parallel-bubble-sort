@@ -66,9 +66,10 @@ int* ValuesManager::generateRandom(int n, int max) {
 
 	values = new int[n];
 	random_device generator;
+	max = max + 1;
 
 	for (auto i = 0; i < n; i++) {
-		values[i] = generator() % (max + 1);
+		values[i] = generator() % max;
 	}
 
 	return values;

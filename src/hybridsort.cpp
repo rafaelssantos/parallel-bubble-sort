@@ -39,11 +39,11 @@ void HybridSort::sort(int* values, int n, int maxDepth) {
 		}
 		bubble.sort((values + (nParts - 1) * nPerPart), n % nParts);
 	}
-	Logger::instance().stop(1, "Bubble Sort");
+	Logger::instance().stop(1, "Bubble part");
 
 	Logger::instance().start(1);
 	MergeSort merge;
 	merge.partialSort(values, n, maxDepth);
-	Logger::instance().stop(1, "Merge Sort");
-	Logger::instance().stop(0, "Hybrid Sort");
+	Logger::instance().stop(1, "Merge part");
+	Logger::instance().stop(0, "Total");
 }

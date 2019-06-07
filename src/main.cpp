@@ -10,89 +10,123 @@ using namespace std;
 
 
 int main(int argc, char* argv[]) {
-	int max = 101;                                      // Valor máximo gerado
-	int n = 10;                                         // Número total de elmentos
-	bool verbose = false;                               // True para imprimir os vetores. False, caso contrário
-	string filePath = "data";                           // Nome do arquivo gerado
-	string logFilePath = "parallel-hybrid-sort.log";    // Nome do arquivo de log
+	int max = 101;                     // Valor máximo gerado
+	int n = 0;                         // Número total de elmentos
+	bool verbose = false;              // True para imprimir os vetores. False, caso contrário
+	bool readInput = false;            // True para ler valores de entrada. False, para gerar aleatórios
+	bool saveInput = false;            // Salva os valores de entrada
+	int mergeDepth = 0;                // Nível de recursão merge
+	string baseFilePath = "data";      // Caminho do arquivo de saída
+	string inputFilePath = "";         // Caminho do arquivo de entrada
+	string logFilePath = "log.csv";    // Nome do arquivo de log
+
 
 
 	/******************************* Opções ***************************************/
 	/******************************************************************************/
-
-	for (auto op = 0; op < argc; op++) {
+	if (argc == 1) {
+		cout << "Invalid options. Type --help or -h to see available options.\n";
+		return 0;
+	}
+	for (auto op = 1; op < argc; op++) {
 		string option(argv[op]);
 
 		if (option.compare("--verbose") == 0 || option.compare("-v") == 0) {
 			verbose = true;
 		} else if (option.compare("--file") == 0 || option.compare("-f") == 0) {
-			filePath = argv[++op];
+			baseFilePath = argv[++op];
+		} else if (option.compare("--input") == 0 || option.compare("-i") == 0) {
+			inputFilePath = argv[++op];
+			readInput = true;
 		} else if (option.compare("--size") == 0 || option.compare("-n") == 0) {
 			n = atoi(argv[++op]);
+		} else if (option.compare("--save") == 0 || option.compare("-s") == 0) {
+			saveInput = true;
+		} else if (option.compare("--merge-depth") == 0 || option.compare("-M") == 0) {
+			mergeDepth = atoi(argv[++op]);
 		} else if (option.compare("--maximum") == 0 || option.compare("-m") == 0) {
 			max = atoi(argv[++op]) + 1;
 		} else if (option.compare("--log") == 0 || option.compare("-l") == 0) {
-			logFilePath = argv[++op];
-		} else if (option.compare("--log-enable") == 0 || option.compare("-L") == 0) {
 			Logger::instance().setEnable(true);
+		} else if (option.compare("--logfile") == 0 || option.compare("-L") == 0) {
+			logFilePath = argv[++op];
 		} else if (option.compare("--times") == 0 || option.compare("-t") == 0) {
 			Logger::instance().setTimes(atoi(argv[++op]));
 		} else if (option.compare("--help") == 0 || option.compare("-h") == 0) {
 			cout << "[OPTION] = description\n";
-			cout << "[--file] or       [-f] = Base data (in and out) file name\n";
-			cout << "[--log-enable] or [-L] = Log enable\n";
-			cout << "[--log] or        [-l] = Log file name\n";
-			cout << "[--maximum] or    [-m] = Max value that can be generated\n";
-			cout << "[--size] or       [-n] = Number of values\n";
-			cout << "[--times] or      [-t] = Number of executions\n";
-			cout << "[--verbose] or    [-v] = Display (or not) values\n";
+			cout << "[--file] or        [-f] = Base file path for output and generated values\n";
+			cout << "[--input] or       [-i] = Set input file path and also indicates that input values will be read\n";
+			cout << "[--save] or        [-s] = Save input values\n";
+			cout << "[--log] or         [-l] = Enable log\n";
+			cout << "[--logfile] or     [-L] = Set log file path\n";
+			cout << "[--maximum] or     [-m] = Maximum value random generated\n";
+			cout << "[--merge-depth] or [-M] = Merge depth\n";
+			cout << "[--size] or        [-n] = Number of random generated values\n";
+			cout << "[--times] or       [-t] = Number of executions for benchmark\n";
+			cout << "[--verbose] or     [-v] = Display data\n";
 			return 0;
 		}
 	}
 
-
 	/******************************* Processamento ********************************/
 	/******************************************************************************/
 
-	int* generatedValues;    // Vetor de elementos
-	int* orderedValues;      // Vetor de elementos ordenados
+	int* input;     // Elementos de entrada
+	int* output;    // Elementos ordenados
 
-	cout << "Generating values............" << flush;
-	generatedValues = ValuesManager::instance().generateRandom(n, max);
-	ValuesManager::instance().save(filePath + "_unordered.txt", generatedValues, n);
+	if (n == 0 && inputFilePath.empty()) {
+		cout << "Invalid options. Type --help or -h to see available options.\n";
+		return 0;
+	}
+
+	if (readInput) {
+		cout << ">> Reading values......................" << flush;
+		input = ValuesManager::instance().read(inputFilePath, &n);
+	} else {
+		cout << ">> Generating random values............" << flush;
+		input = ValuesManager::instance().generateRandom(n, max);
+	}
+	if (saveInput) {
+		ValuesManager::instance().save(baseFilePath + "_input.txt", input, n);
+	}
 	cout << "DONE\n" << flush;
 
 
 	if (verbose) {
-		cout << "\nGenerated values\n";
-		ValuesManager::instance().print(generatedValues, n);
+		cout << "\nINPUT\n";
+		ValuesManager::instance().print(input, n);
+		cout << "\n";
 	}
 
-	orderedValues = new int[n];
+	output = new int[n];
 
-	if (Logger::instance().isEnable()) {
+	if (Logger::instance().times() > 1) {
+		int time = 0;
 		while (Logger::instance().hasRepeatToExec()) {
-			ValuesManager::instance().copy(orderedValues, generatedValues, n);
-			cout << "Sorting......................" << flush;
-			SortManager::instance().sort(SortAlgorithmType::SERIAL_HYBRID, orderedValues, n, 2);
-			ValuesManager::instance().save(filePath + "_ordered.txt", orderedValues, n);
+			ValuesManager::instance().copy(output, input, n);
+
+			cout << ">> Sorting #" << time << ".........................." << flush;
+			SortManager::instance().sort(SortAlgorithmType::SERIAL_HYBRID, output, n, mergeDepth);
+
+			ValuesManager::instance().save(baseFilePath + "_ouput.txt", output, n);
 			cout << "DONE\n" << flush;
+			time++;
 		}
 	}
 
 	else {
-		ValuesManager::instance().copy(orderedValues, generatedValues, n);
-		cout << "Sorting......................" << flush;
-		SortManager::instance().sort(SortAlgorithmType::SERIAL_HYBRID, orderedValues, n, 2);
-		ValuesManager::instance().save(filePath + "_ordered.txt", orderedValues, n);
+		ValuesManager::instance().copy(output, input, n);
+		cout << ">> Sorting............................." << flush;
+		SortManager::instance().sort(SortAlgorithmType::SERIAL_HYBRID, output, n, mergeDepth);
+		ValuesManager::instance().save(baseFilePath + "_ouput.txt", output, n);
 		cout << "DONE\n" << flush;
 	}
 
 
 
 	if (verbose) {
-		cout << "\nOrdered values\n";
-		ValuesManager::instance().print(generatedValues, n);
+		cout << "\nOUTPUT\n";
+		ValuesManager::instance().print(output, n);
 		cout << "\n";
 	}
 
@@ -100,10 +134,10 @@ int main(int argc, char* argv[]) {
 		Logger::instance().save(logFilePath);
 	}
 
-	delete[] generatedValues;
-	delete[] orderedValues;
-	generatedValues = nullptr;
-	orderedValues = nullptr;
+	delete[] input;
+	delete[] output;
+	input = nullptr;
+	output = nullptr;
 
 
 	//	int nthreads, tid;

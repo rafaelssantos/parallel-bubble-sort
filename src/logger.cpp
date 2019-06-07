@@ -37,7 +37,7 @@ void Logger::stop(int i, std::string message) {
 	auto end = chrono::system_clock::now();
 	std::chrono::duration<float> elapsed_seconds = end - m_startsTime[i];
 
-	m_log += message + ";" + to_string(elapsed_seconds.count()) + "\n";
+	m_log += message + "," + to_string(elapsed_seconds.count()) + "\n";
 }
 
 
