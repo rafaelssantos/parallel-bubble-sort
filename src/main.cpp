@@ -11,11 +11,11 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
 	int max = 101;                     // Valor máximo gerado
-	int n = 0;                         // Número total de elmentos
+	int n = 0;                         // Número total de elementos
 	bool verbose = false;              // True para imprimir os vetores. False, caso contrário
 	bool readInput = false;            // True para ler valores de entrada. False, para gerar aleatórios
 	bool saveInput = false;            // Salva os valores de entrada
-	int mergeDepth = 0;                // Nível de recursão merge
+	int mergeDepth = 5;                // Nível de recursão merge parcial. Veja 2^5 = 32 (Vetores)
 	string baseFilePath = "data";      // Caminho do arquivo de saída
 	string inputFilePath = "";         // Caminho do arquivo de entrada
 	string logFilePath = "log.csv";    // Nome do arquivo de log
