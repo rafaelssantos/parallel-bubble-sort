@@ -9,8 +9,7 @@ public:
 
 	virtual ~HybridSort();
 
-public:
-	void sort(int* values, int n, int maxDepth);
+	void sort(int* values, int n, int maxDepth, int nThreads);
 };
 
 #endif    // HYBRIDSORT_H

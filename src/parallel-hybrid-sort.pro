@@ -7,8 +7,6 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 
-
-
 # [CHANGE]
 # Add all source files, even cuda source files
 HEADERS += \

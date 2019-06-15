@@ -8,16 +8,16 @@
 
 
 
-void SortManager::sort(SortAlgorithmType sortType, int* values, int n, int maxDepth) {
+void SortManager::sort(SortAlgorithmType sortType, int* values, int n, int maxDepth, int nThtreads) {
 	if (sortType == SortAlgorithmType::SERIAL_BUBBLE) {
 		BubbleSort sorter;
 		sorter.sort(values, n);
 	} else if (sortType == SortAlgorithmType::SERIAL_MERGE) {
 		MergeSort sorter;
 		sorter.sort(values, n);
-	} else if (sortType == SortAlgorithmType::SERIAL_HYBRID) {
+	} else if (sortType == SortAlgorithmType::PARALLEL_HYBRID) {
 		HybridSort sorter;
-		sorter.sort(values, n, maxDepth);
+		sorter.sort(values, n, maxDepth, nThtreads);
 	}
 }
 
