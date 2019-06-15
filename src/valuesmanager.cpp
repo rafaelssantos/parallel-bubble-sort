@@ -4,9 +4,9 @@
 #include <cstring>
 #include <fstream>
 #include <iostream>
+#include <limits>
 #include <random>
 #include <vector>
-
 
 
 using namespace std;
@@ -66,7 +66,6 @@ int* ValuesManager::generateRandom(int n, int max) {
 
 	values = new int[n];
 	random_device generator;
-	max = max + 1;
 
 	for (auto i = 0; i < n; i++) {
 		values[i] = generator() % max;
@@ -132,6 +131,27 @@ int* ValuesManager::read(string filePath, int* n) {
 	file.close();
 
 	return values;
+}
+
+
+
+
+int* ValuesManager::expandToMultiple(const int* values, int n, int* expN, int factor) {
+	int* expValues = nullptr;
+	if (n % factor == 0) {
+		*expN = n;
+	} else {
+		*expN = static_cast<int>(ceil((1.0f * n) / factor)) * factor;
+	}
+
+	expValues = new int[*expN];
+	memcpy(expValues, values, sizeof(int) * n);
+
+	for (auto i = n; i < *expN; i++) {
+		expValues[i] = std::numeric_limits<int>::max();
+	}
+
+	return expValues;
 }
 
 

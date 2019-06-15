@@ -80,12 +80,12 @@ int main(int argc, char* argv[]) {
 	if (readInput) {
 		cout << ">> Reading values......................" << flush;
 		int* tempInput = ValuesManager::instance().read(inputFilePath, &n);
-		input = ValuesManager::instance().expand(tempInput, n, &nExp, static_cast<int>(pow(2, mergeDepth)));
+		input = ValuesManager::instance().expandToMultiple(tempInput, n, &nExp, static_cast<int>(pow(2, mergeDepth)));
 		delete tempInput;
 	} else {
 		cout << ">> Generating random values............" << flush;
 		int* tempInput = ValuesManager::instance().generateRandom(n, max);
-		input = ValuesManager::instance().expand(tempInput, n, &nExp, static_cast<int>(pow(2, mergeDepth)));
+		input = ValuesManager::instance().expandToMultiple(tempInput, n, &nExp, static_cast<int>(pow(2, mergeDepth)));
 		delete tempInput;
 	}
 

@@ -5,7 +5,7 @@
 
 class SortManager {
 public:
-	void sort(SortAlgorithmType sortType, int* values, int n, int maxDepth = 2);
+	void sort(SortAlgorithmType sortType, int* values, int n, int maxDepth = 2, int nThtreads = 1);
 
 	static SortManager& instance();
 
