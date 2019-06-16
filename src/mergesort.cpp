@@ -52,6 +52,22 @@ void MergeSort::partialSort(int* values, int n, int maxDepth) {
 
 
 
+void MergeSort::partialSortParallel(int* values, int n, int maxDepth) {
+	int* tempValues = nullptr;
+
+	tempValues = new int[n];
+	memcpy(tempValues, values, n * sizeof(int));
+
+	divideParallel(values, tempValues, 0, n - 1, maxDepth, 0);
+
+
+	delete[] tempValues;
+	tempValues = nullptr;
+}
+
+
+
+
 
 void MergeSort::merge(int* values, int* tempValues, int begin, int mid, int end) {
 	int l;
@@ -112,6 +128,22 @@ void MergeSort::divide(int* values, int* tempValues, int begin, int end, int max
 		int mid = (begin + end) / 2;
 		divide(values, tempValues, begin, mid, maxDepth, depth + 1);
 		divide(values, tempValues, mid + 1, end, maxDepth, depth + 1);
+		merge(values, tempValues, begin, mid, end);
+	}
+}
+
+
+
+void MergeSort::divideParallel(int* values, int* tempValues, int begin, int end, int maxDepth, int depth) {
+	if (begin < end && depth <= maxDepth) {
+		int mid = (begin + end) / 2;
+#pragma omp parallel sections
+		{
+#pragma omp section
+			{ divide(values, tempValues, begin, mid, maxDepth, depth + 1); }
+#pragma omp section
+			{ divide(values, tempValues, mid + 1, end, maxDepth, depth + 1); }
+		}
 		merge(values, tempValues, begin, mid, end);
 	}
 }

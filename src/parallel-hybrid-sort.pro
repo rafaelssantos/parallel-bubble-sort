@@ -37,6 +37,10 @@ SOURCES += \
 
 
 
+QMAKE_CXXFLAGS+= -fopenmp
+QMAKE_LFLAGS +=  -fopenmp
+
+
 # [CHANGE]
 # Add just the cuda source files
 CUDA_SOURCES += \

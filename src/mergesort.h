@@ -15,12 +15,17 @@ public:
 
 	virtual void partialSort(int* values, int n, int maxDepth);
 
+	virtual void partialSortParallel(int* values, int n, int maxDepth);
+
+
 protected:
 	void virtual merge(int* values, int* tempValues, int begin, int mid, int end);
 
 	void virtual divide(int* values, int* tempValues, int begin, int end);
 
 	void virtual divide(int* values, int* tempValues, int begin, int end, int maxDepth, int depth);
+
+	void virtual divideParallel(int* values, int* tempValues, int begin, int end, int maxDepth, int depth);
 };
 
 #endif    // MERGESORT_H
