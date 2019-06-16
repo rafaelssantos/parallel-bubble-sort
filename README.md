@@ -35,7 +35,6 @@
 	<li>[--parallel] ou [-p] <p>Define que o algoritmo paralelo deve ser executado. Sem esta opção, o algoritmo sequencial é executado.</p> </li>
 	<li>[--size] ou [-n] <p>Quantidade total de elementos do vetor. Por causa do algoritmo, caso esse valor não seja múltiplo do número definido para subvetores, o programa altera para o pŕoximo valor múltiplo.  MAX_INT é utilizdo nos valores adicionais. Após o processamento, esses valores são descartados no resultado.</p></li>
 	<li>[--threads] ou [-t] <p>Número de threads do algoritmo paralelo. Esta opção só tem efeito caso a opção do algoritmo paraleo tenha sido definida.</p></li>
-	<li>[--times] ou [-x] <p>Número de execuções realizadas para teste. O log deve estar habilitado.</p></li>
 	<li>[--verbose] ou  [-v] <p>Exibe os valores de entrada e saída durante a execução do programa.</p></li>
 </ul>
 

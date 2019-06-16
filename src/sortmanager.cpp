@@ -17,7 +17,7 @@ void SortManager::sort(SortAlgorithmType sortType, int* values, int n, int maxDe
 		sorter.sort(values, n);
 	} else if (sortType == SortAlgorithmType::SERIAL_HYBRID) {
 		HybridSort sorter;
-		sorter.sortParallel(values, n, maxDepth, nThtreads);
+		sorter.sort(values, n, maxDepth);
 	} else if (sortType == SortAlgorithmType::PARALLEL_HYBRID) {
 		HybridSort sorter;
 		sorter.sortParallel(values, n, maxDepth, nThtreads);
