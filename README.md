@@ -1,6 +1,6 @@
 <h1> Parallel Hybrid Sort </h1>
 
-<p> Trabalho apresentado na disciplina de Computação de Alto Desempenho do PPGCC da Unesp, ministrada pelo Prof. Dr. Aleardo Manacero. </p>
+<p> <a href="https://www.dcce.ibilce.unesp.br/~aleardo/cursos/hpc/projeto1.php" target="_blank">Trabalho</a> apresentado na disciplina de Computação de Alto Desempenho do PPGCC da Unesp, ministrada pelo Prof. Dr. Aleardo Manacero. </p>
 
 
 <h2> Descrição do Algoritmo </h2>
