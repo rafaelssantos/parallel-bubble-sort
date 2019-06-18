@@ -31,7 +31,7 @@
 	<li>[--log] ou  [-l] <p>Habilita o modo de log, salvando tempos de execuções,</p></li>
 	<li>[--logfile] ou [-L] <p>Define o arquivo de saída onde serão salvos os tempos de execução</p></li>		
 	<li>[--maximum] ou [-m] <p>Define o maior valor gerado no caso da entrada ser aleatória. Intervalo: [0, -m].</p> </li>
-	<li>[--merge-depth] ou [-M] <p>Define o número de subvetores no qual o vetor é dividido. Veja que esse valor não é definido de forma direta, mas sim por meio de uma potência de base 2 (2^-M). O valor 5 é utilizado por padrão, caso esta opção não seja definida. Desta forma, há por padrão 32 subvetores (2^5).</p></li>
+	<li>[--merge-depth] ou [-d] <p>Define o número de subvetores no qual o vetor é dividido. Veja que esse valor não é definido de forma direta, mas sim por meio de uma potência de base 2 (2^-d). O valor 5 é utilizado por padrão, caso esta opção não seja definida. Desta forma, há por padrão 32 subvetores (2^5).</p></li>
 	<li>[--parallel] ou [-p] <p>Define que o algoritmo paralelo deve ser executado. Sem esta opção, o algoritmo sequencial é executado.</p> </li>
 	<li>[--size] ou [-n] <p>Quantidade total de elementos do vetor. Por causa do algoritmo, caso esse valor não seja múltiplo do número definido para subvetores, o programa altera para o pŕoximo valor múltiplo.  MAX_INT é utilizdo nos valores adicionais. Após o processamento, esses valores são descartados no resultado.</p></li>
 	<li>[--threads] ou [-t] <p>Número de threads do algoritmo paralelo. Esta opção só tem efeito caso a opção do algoritmo paralelo tenha sido definida.</p></li>
