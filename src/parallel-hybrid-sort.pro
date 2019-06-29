@@ -44,5 +44,9 @@ QMAKE_CXXFLAGS_RELEASE += -O3
 
 # [MPI]
 # C++ MPI compiler optimization flags
+<<<<<<< HEAD
 QMAKE_CXXFLAGS += -fopenmp
+=======
+QMAKE_CXXFLAGS+= -fopenmp
+>>>>>>> openmp
 QMAKE_LFLAGS +=  -fopenmp
