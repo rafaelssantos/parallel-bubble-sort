@@ -17,19 +17,13 @@ public:
 
 	void stop(int i, std::string message);
 
-	bool hasRepeatToExec();
-
 	void startBenchmark();
-
-	void setTimes(int times);
-
-	int times() const;
 
 	void setEnable(bool enable);
 
 	bool isEnable();
 
-	void save(std::string filePath);
+	void print();
 
 	void reset();
 
@@ -40,8 +34,6 @@ private:
 	virtual ~Logger();
 
 	std::vector<std::chrono::system_clock::time_point> m_startsTime;
-	int m_times;
-	int m_iter;
 	bool m_enable;
 	std::string m_log;
 };

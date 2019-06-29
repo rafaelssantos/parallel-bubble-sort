@@ -45,21 +45,8 @@ void Logger::stop(int i, std::string message) {
 
 
 void Logger::startBenchmark() {
-	m_iter = 0;
 }
 
-
-
-void Logger::setTimes(int times) {
-	m_times = times;
-}
-
-
-
-
-int Logger::times() const {
-	return m_times;
-}
 
 
 
@@ -75,12 +62,8 @@ bool Logger::isEnable() {
 
 
 
-void Logger::save(string filePath) {
-	ofstream file(filePath);
-
-	file << m_log;
-
-	file.close();
+void Logger::print() {
+	std::cout << m_log << "\n";
 }
 
 
@@ -89,25 +72,12 @@ void Logger::save(string filePath) {
 
 void Logger::reset() {
 	m_log = "";
-	m_iter = 0;
 }
 
-
-
-
-bool Logger::hasRepeatToExec() {
-	if (m_iter++ < m_times) {
-		return true;
-	} else {
-		return false;
-	}
-}
 
 
 
 Logger::Logger() {
-	m_times = 1;
-	m_iter = 0;
 	m_enable = false;
 	m_log = "";
 }

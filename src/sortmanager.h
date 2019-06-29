@@ -3,9 +3,11 @@
 
 #include "sortalgorithmtype.h"
 
+
+
 class SortManager {
 public:
-	void sort(SortAlgorithmType sortType, int* values, int n, int maxDepth = 2, int nThtreads = 1);
+	void sort(SortAlgorithmType sortType, int* values, int n, int maxDepth, int nThtreads);
 
 	static SortManager& instance();
 
@@ -14,5 +16,7 @@ private:
 
 	~SortManager();
 };
+
+
 
 #endif    // SORTMANAGER_H

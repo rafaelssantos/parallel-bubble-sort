@@ -15,9 +15,12 @@ void SortManager::sort(SortAlgorithmType sortType, int* values, int n, int maxDe
 	} else if (sortType == SortAlgorithmType::SERIAL_MERGE) {
 		MergeSort sorter;
 		sorter.sort(values, n);
+	} else if (sortType == SortAlgorithmType::SERIAL_HYBRID) {
+		HybridSort sorter;
+		sorter.sort(values, n, maxDepth);
 	} else if (sortType == SortAlgorithmType::PARALLEL_HYBRID) {
 		HybridSort sorter;
-		sorter.sort(values, n, maxDepth, nThtreads);
+		sorter.sortParallel(values, n, maxDepth, nThtreads);
 	}
 }
 
