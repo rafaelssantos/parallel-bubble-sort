@@ -61,7 +61,7 @@ int main(int argc, char* argv[]) {
 			readInput = true;
 		} else if (option.compare("--size") == 0 || option.compare("-n") == 0) {
 			n = atoi(argv[++op]);
-		} else if (option.compare("--merge-depth") == 0 || option.compare("-M") == 0) {
+		} else if (option.compare("--merge-depth") == 0 || option.compare("-d") == 0) {
 			mergeDepth = atoi(argv[++op]);
 		} else if (option.compare("--maximum") == 0 || option.compare("-m") == 0) {
 			max = atoi(argv[++op]) + 1;
@@ -73,15 +73,15 @@ int main(int argc, char* argv[]) {
 			parallel = true;
 		} else if (option.compare("--help") == 0 || option.compare("-h") == 0) {
 			cout << "[OPTION] = description\n";
-			cout << "[--file] or        [-f] = Base file path for input and output and generated values\n";
-			cout << "[--input] or       [-i] = Set input file path and also indicates that input values will be read\n";
-			cout << "[--log] or         [-l] = Enable log\n";
-			cout << "[--maximum] or     [-m] = Maximum value random generated\n";
-			cout << "[--merge-depth] or [-M] = Merge depth\n";
-			cout << "[--parallel] or    [-p] = Choose the parallle version fo the algorithm\n";
-			cout << "[--size] or        [-n] = Number of random generated values\n";
-			cout << "[--threads] or     [-t] = Number of executions for thread\n";
-			cout << "[--verbose] or     [-v] = Display data\n";
+			cout << "[--file] or [-f] <path>         = Base file path for input and output and generated values\n";
+			cout << "[--input] or [-i] <path>        = Set input file path and also indicates that input values will be read\n";
+			cout << "[--log] or[-l]                  = Enable log\n";
+			cout << "[--maximum] or [-m] <value>     = Maximum value random generated\n";
+			cout << "[--merge-depth] or [-d] <value> = Merge depth (d^2)\n";
+			cout << "[--parallel] or [-p]            = Choose the parallel version of the algorithm\n";
+			cout << "[--size] or [-n] <value>        = Number of random generated values\n";
+			cout << "[--threads] or [-t] <value>     = Number of thread\n";
+			cout << "[--verbose] or [-v]             = Display data\n";
 			return 0;
 		}
 	}
