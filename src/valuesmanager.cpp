@@ -136,18 +136,25 @@ int* ValuesManager::read(string filePath, int* n) {
 
 
 
-int* ValuesManager::expandToMultiple(const int* values, int n, int* expN, int factor) {
-	int* expValues = nullptr;
+int ValuesManager::calcExpToMultiple(int n, int factor) {
+	int expN;
+
 	if (n % factor == 0) {
-		*expN = n;
+		expN = n;
 	} else {
-		*expN = static_cast<int>(ceil((1.0f * n) / factor)) * factor;
+		expN = static_cast<int>(ceil((1.0f * n) / factor)) * factor;
 	}
 
-	expValues = new int[*expN];
+	return expN;
+}
+
+
+
+int* ValuesManager::expandToMultiple(const int* values, int n, int expN) {
+	int* expValues = new int[expN];
 	memcpy(expValues, values, sizeof(int) * n);
 
-	for (auto i = n; i < *expN; i++) {
+	for (auto i = n; i < expN; i++) {
 		expValues[i] = std::numeric_limits<int>::max();
 	}
 

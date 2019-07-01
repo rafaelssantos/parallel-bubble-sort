@@ -21,7 +21,10 @@ public:
 
 	int* read(std::string filePath, int* n);
 
-	int* expandToMultiple(const int* values, int n, int* expN, int factor);
+	int* expandToMultiple(const int* values, int n, int expN);
+
+	int calcExpToMultiple(int n, int factor);
+
 
 private:
 	ValuesManager();

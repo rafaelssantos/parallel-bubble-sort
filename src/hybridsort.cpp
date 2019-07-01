@@ -1,9 +1,10 @@
 #include "hybridsort.h"
 
 
-#include <omp.h>
+#include <mpi.h>
 #include <cmath>
 #include <iostream>
+
 #include "bubblesort.h"
 #include "logger.h"
 #include "mergesort.h"
@@ -46,20 +47,39 @@ void HybridSort::sort(int* values, int n, int maxDepth) {
 
 
 void HybridSort::sortParallel(int* values, int n, int maxDepth, int nThreads) {
-	//	int nParts = static_cast<int>(pow(2, maxDepth));
-	//	int nPerPart = n / nParts;
-	//	int nPartsPerThread = nParts / nThreads;
+	int nPerPart;
+	int rank;
+	int worldSize;
 
-	//	Logger::instance().start(0);
-	//	Logger::instance().start(1);
+	//	MPI_Barrier(MPI_COMM_WORLD);
 
-	//#pragma omp parallel num_threads(nThreads)
-	//	{
-	//		for (auto i = omp_get_thread_num() * nPartsPerThread; i < (omp_get_thread_num() + 1) * nPartsPerThread; i++) {
-	//			BubbleSort bubble;
-	//			bubble.sort((values + i * nPerPart), nPerPart);
-	//		}
+	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+	MPI_Comm_size(MPI_COMM_WORLD, &worldSize);
+
+	nPerPart = n / worldSize;
+	int localValues[nPerPart];
+
+	BubbleSort bubble;
+	//	std::cout << "Here :" << rank << " " << n << " " << nPerPart << "\n";
+
+	MPI_Scatter(values, nPerPart, MPI_INT, localValues, nPerPart, MPI_INT, 0, MPI_COMM_WORLD);
+	bubble.sort(localValues, nPerPart);
+
+	MPI_Gather(localValues, nPerPart, MPI_INT, values, nPerPart, MPI_INT, 0, MPI_COMM_WORLD);
+
+
+
+	//	MPI_Gather(localValues, nPerPart, MPI_INT, values, nPerPart, MPI_INT, 0, MPI_COMM_WORLD);
+	//	MPI_Scatter(values, nPerPart, MPI_INT, localValues, nPerPart, MPI_INT, 0, MPI_COMM_WORLD);
+
+
+	//	if (rank == 0) {
+	//		Logger::instance().start(0);
+	//		Logger::instance().start(1);
 	//	}
+
+
+
 
 	//	Logger::instance().stop(1, "Bubble");
 
@@ -69,4 +89,13 @@ void HybridSort::sortParallel(int* values, int n, int maxDepth, int nThreads) {
 
 	//	Logger::instance().stop(1, "Merge");
 	//	Logger::instance().stop(0, "Total");
+
+	if (rank == 0) {
+		std::cout << "N =" << n << "\n";
+		for (auto i = 0; i < n; i++) {
+			std::cout << values[i] << "\n";
+		}
+	}
+
+	//	delete[] localValues;
 }
