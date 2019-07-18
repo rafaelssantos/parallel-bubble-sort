@@ -56,17 +56,32 @@ void HybridSort::sortParallel(int* values, int n, int maxDepth, int nThreads) {
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 	MPI_Comm_size(MPI_COMM_WORLD, &worldSize);
 
-	nPerPart = n / worldSize;
+	nPerPart = n / nThreads;
 	int localValues[nPerPart];
+	int sendCounts[32];
+	int sendDispls[32];
 
-	BubbleSort bubble;
+	int index = 0;
+	while (index < nThreads) {
+		sendCounts[index] = nPerPart;
+		sendDispls[index] = index * nPerPart;
+		index++;
+	}
+	while (index < 32) {
+		sendCounts[index] = 0;
+		sendDispls[index] = 0;
+		index++;
+	}
+
 	//	std::cout << "Here :" << rank << " " << n << " " << nPerPart << "\n";
 
-	MPI_Scatter(values, nPerPart, MPI_INT, localValues, nPerPart, MPI_INT, 0, MPI_COMM_WORLD);
+	//	MPI_Scatter(values, nPerPart, MPI_INT, localValues, nPerPart, MPI_INT, 0, MPI_COMM_WORLD);
+	MPI_Scatterv(values, sendCounts, sendDispls, MPI_INT, localValues, nPerPart, MPI_INT, 0, MPI_COMM_WORLD);
+	BubbleSort bubble;
 	bubble.sort(localValues, nPerPart);
 
-	MPI_Gather(localValues, nPerPart, MPI_INT, values, nPerPart, MPI_INT, 0, MPI_COMM_WORLD);
-
+	// MPI_Gather(localValues, nPerPart, MPI_INT, values, nPerPart, MPI_INT, 0, MPI_COMM_WORLD);
+	MPI_Gatherv(localValues, nPerPart, MPI_INT, values, sendCounts, sendDispls, MPI_INT, 0, MPI_COMM_WORLD);
 
 
 	//	MPI_Gather(localValues, nPerPart, MPI_INT, values, nPerPart, MPI_INT, 0, MPI_COMM_WORLD);
@@ -96,6 +111,4 @@ void HybridSort::sortParallel(int* values, int n, int maxDepth, int nThreads) {
 			std::cout << values[i] << "\n";
 		}
 	}
-
-	//	delete[] localValues;
 }
