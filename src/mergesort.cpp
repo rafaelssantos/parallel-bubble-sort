@@ -37,6 +37,48 @@ void MergeSort::sort(int* values, int n) {
 
 
 
+int* MergeSort::mergeParallel(int* A, int asize, int* B, int bsize) {
+	int ai, bi, ci, i;
+	int* C;
+	int csize = asize + bsize;
+
+	ai = 0;
+	bi = 0;
+	ci = 0;
+
+
+	C = new int[csize];
+	while ((ai < asize) && (bi < bsize)) {
+		if (A[ai] <= B[bi]) {
+			C[ci] = A[ai];
+			ci++;
+			ai++;
+		} else {
+			C[ci] = B[bi];
+			ci++;
+			bi++;
+		}
+	}
+
+	if (ai >= asize)
+		for (i = ci; i < csize; i++, bi++)
+			C[i] = B[bi];
+	else if (bi >= bsize)
+		for (i = ci; i < csize; i++, ai++)
+			C[i] = A[ai];
+
+	for (i = 0; i < asize; i++)
+		A[i] = C[i];
+	for (i = 0; i < bsize; i++)
+		B[i] = C[asize + i];
+
+
+	return C;
+}
+
+
+
+
 
 void MergeSort::partialSort(int* values, int n, int maxDepth) {
 	int* tempValues = nullptr;

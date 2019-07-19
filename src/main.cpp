@@ -33,7 +33,7 @@ void messageError() {
 
 
 int main(int argc, char* argv[]) {
-	int max = 100;          // Valor máximo gerado
+	int max = 1000;         // Valor máximo gerado
 	int n = 320;            // Número total de elementos
 	int nThreads = 16;      // Número de threads
 	int mergeDepth = 5;     // Nível de recursão merge parcial. Veja 2^5 = 32 (Vetores)

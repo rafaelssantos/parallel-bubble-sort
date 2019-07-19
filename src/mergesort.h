@@ -13,6 +13,8 @@ public:
 
 	virtual void sort(int* values, int n);
 
+	virtual int* mergeParallel(int* A, int asize, int* B, int bsize);
+
 	virtual void partialSort(int* values, int n, int maxDepth);
 
 	virtual void partialSortParallel(int* values, int n, int maxDepth);
