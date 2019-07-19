@@ -33,7 +33,7 @@
 	<li>[--maximum] ou [-m] <p>Define o maior valor gerado no caso da entrada ser aleatória. Intervalo: [0, -m].</p> </li>
 	<li>[--parallel] ou [-p] <p>Define que o algoritmo paralelo deve ser executado. Sem esta opção, o algoritmo sequencial é executado.</p> </li>
 	<li>[--size] ou [-n] <p>Quantidade total de elementos do vetor. Por causa do algoritmo, caso esse valor não seja múltiplo do número definido para subvetores, o programa altera para o pŕoximo valor múltiplo.  MAX_INT é utilizdo nos valores adicionais. Após o processamento, esses valores são descartados no resultado.</p></li>
-	<li>[--threads] ou [-t] <p>Número de threads do algoritmo paralelo. Esta opção só tem efeito caso a opção do algoritmo paralelo tenha sido definida.</p></li>
+	<li>[--threads] ou [-t] <p>Número de threads (processos no caso do MPI) do algoritmo paralelo. Esta opção só tem efeito caso a opção do algoritmo paralelo tenha sido definida.</p></li>
 	<li>[--verbose] ou  [-v] <p>Exibe os valores de entrada e saída durante a execução do programa.</p></li>
 	<li>*Nível de recursão do merge sort é definido de acordo com o número de processos instanciados (log2 NP).</p></li>
 </ul>
