@@ -31,11 +31,11 @@ void messageError() {
 
 
 int main(int argc, char* argv[]) {
-	int max = 100;           // Valor máximo gerado
-	int n = 0;               // Número total de elementos
-	int nThreads = 16;       // Número de threads
-	int mergeDepth = 5;      // Nível de recursão merge parcial. Veja 2^5 = 32 (Vetores)
-	int parallel = false;    // Execução do algoritmo paralelo
+	int max = 100;               // Valor máximo gerado
+	int n = 0;                   // Número total de elementos
+	int threadsCount = 16;       // Número de threads
+	int mergeRecDepth = 5;       // Nível de recursão merge parcial. Veja 2^5 = 32 (Vetores)
+	int execParallel = false;    // Execução do algoritmo paralelo
 
 	bool verbose = false;      // True para imprimir os vetores. False, caso contrário
 	bool readInput = false;    // True para ler valores de entrada. False, para gerar aleatórios
@@ -62,22 +62,22 @@ int main(int argc, char* argv[]) {
 		} else if (option.compare("--size") == 0 || option.compare("-n") == 0) {
 			n = atoi(argv[++op]);
 		} else if (option.compare("--merge-depth") == 0 || option.compare("-d") == 0) {
-			mergeDepth = atoi(argv[++op]);
+			mergeRecDepth = atoi(argv[++op]);
 		} else if (option.compare("--maximum") == 0 || option.compare("-m") == 0) {
 			max = atoi(argv[++op]) + 1;
 		} else if (option.compare("--log") == 0 || option.compare("-l") == 0) {
 			Logger::instance().setEnable(true);
 		} else if (option.compare("--threads") == 0 || option.compare("-t") == 0) {
-			nThreads = atoi(argv[++op]);
+			threadsCount = atoi(argv[++op]);
 		} else if (option.compare("--parallel") == 0 || option.compare("-p") == 0) {
-			parallel = true;
+			execParallel = true;
 		} else if (option.compare("--help") == 0 || option.compare("-h") == 0) {
 			cout << "[OPTION] = description\n";
 			cout << "[--file] or [-f] <path>         = Base file path for input and output and generated values\n";
 			cout << "[--input] or [-i] <path>        = Set input file path and also indicates that input values will be read\n";
 			cout << "[--log] or[-l]                  = Enable log\n";
 			cout << "[--maximum] or [-m] <value>     = Maximum value random generated\n";
-			cout << "[--merge-depth] or [-d] <value> = Merge depth (d^2)\n";
+			cout << "[--merge-depth] or [-d] <value> = Merge recursion depth (d^2)\n";
 			cout << "[--parallel] or [-p]            = Choose the parallel version of the algorithm\n";
 			cout << "[--size] or [-n] <value>        = Number of random generated values\n";
 			cout << "[--threads] or [-t] <value>     = Number of thread\n";
@@ -107,14 +107,14 @@ int main(int argc, char* argv[]) {
 			cout << ">> Reading values......................" << flush;
 		}
 		int* tempInput = ValuesManager::instance().read(inputFilePath, &n);
-		input = ValuesManager::instance().expandToMultiple(tempInput, n, &nExp, static_cast<int>(pow(2, mergeDepth)));
+		input = ValuesManager::instance().expandToMultiple(tempInput, n, &nExp, static_cast<int>(pow(2, mergeRecDepth)));
 		delete tempInput;
 	} else {
 		if (verbose) {
 			cout << ">> Generating random values............" << flush;
 		}
 		int* tempInput = ValuesManager::instance().generateRandom(n, max);
-		input = ValuesManager::instance().expandToMultiple(tempInput, n, &nExp, static_cast<int>(pow(2, mergeDepth)));
+		input = ValuesManager::instance().expandToMultiple(tempInput, n, &nExp, static_cast<int>(pow(2, mergeRecDepth)));
 		delete tempInput;
 	}
 
@@ -137,10 +137,10 @@ int main(int argc, char* argv[]) {
 	if (verbose) {
 		cout << ">> Sorting............................." << flush;
 	}
-	if (parallel) {
-		SortManager::instance().sort(SortAlgorithmType::PARALLEL_HYBRID, output, nExp, mergeDepth, nThreads);
+	if (execParallel) {
+		SortManager::instance().sort(SortAlgorithmType::PARALLEL_HYBRID, output, nExp, mergeRecDepth, threadsCount);
 	} else {
-		SortManager::instance().sort(SortAlgorithmType::SERIAL_HYBRID, output, nExp, mergeDepth, nThreads);
+		SortManager::instance().sort(SortAlgorithmType::SERIAL_HYBRID, output, nExp, mergeRecDepth, threadsCount);
 	}
 	ValuesManager::instance().save(baseFilePath + "output.txt", output, n);
 

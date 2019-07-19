@@ -37,13 +37,13 @@ void MergeSort::sort(int* values, int n) {
 
 
 
-void MergeSort::partialSort(int* values, int n, int maxDepth) {
+void MergeSort::partialSort(int* values, int n, int maxRecDepth) {
 	int* tempValues = nullptr;
 
 	tempValues = new int[n];
 	memcpy(tempValues, values, n * sizeof(int));
 
-	divide(values, tempValues, 0, n - 1, maxDepth, 0);
+	partialDivide(values, tempValues, 0, n - 1, maxRecDepth, 0);
 
 
 	delete[] tempValues;
@@ -53,7 +53,7 @@ void MergeSort::partialSort(int* values, int n, int maxDepth) {
 
 
 
-void MergeSort::partialSortParallel(int* values, int n, int maxDepth) {
+void MergeSort::partialSortParallel(int* values, int n, int maxRecDepth) {
 	int* tempValues = nullptr;
 
 	tempValues = new int[n];
@@ -64,7 +64,7 @@ void MergeSort::partialSortParallel(int* values, int n, int maxDepth) {
 	omp_set_dynamic(0);
 
 #pragma omp parallel
-	divideParallel(values, tempValues, 0, n - 1, maxDepth, 0);
+	partialDivideParallel(values, tempValues, 0, n - 1, maxRecDepth, 0);
 
 
 	delete[] tempValues;
@@ -129,28 +129,26 @@ void MergeSort::divide(int* values, int* tempValues, int begin, int end) {
 
 
 
-void MergeSort::divide(int* values, int* tempValues, int begin, int end, int maxDepth, int depth) {
-	if (begin < end && depth <= maxDepth) {
+void MergeSort::partialDivide(int* values, int* tempValues, int begin, int end, int maxRecDepth, int depth) {
+	if (begin < end && depth <= maxRecDepth) {
 		int mid = (begin + end) / 2;
-		divide(values, tempValues, begin, mid, maxDepth, depth + 1);
-		divide(values, tempValues, mid + 1, end, maxDepth, depth + 1);
+		partialDivide(values, tempValues, begin, mid, maxRecDepth, depth + 1);
+		partialDivide(values, tempValues, mid + 1, end, maxRecDepth, depth + 1);
 		merge(values, tempValues, begin, mid, end);
 	}
 }
 
 
 
-void MergeSort::divideParallel(int* values, int* tempValues, int begin, int end, int maxDepth, int depth) {
-	if (begin < end && depth <= maxDepth) {
+void MergeSort::partialDivideParallel(int* values, int* tempValues, int begin, int end, int maxRecDepth, int depth) {
+	if (begin < end && depth <= maxRecDepth) {
 		int mid = (begin + end) / 2;
 
-		//		std::cout << depth << " " << omp_get_num_threads() << "\n ";
+#pragma omp task firstprivate(values, tempValues, begin, mid, maxDepth, depth)
+		partialDivideParallel(values, tempValues, begin, mid, maxRecDepth, depth + 1);
 
 #pragma omp task firstprivate(values, tempValues, begin, mid, maxDepth, depth)
-		divideParallel(values, tempValues, begin, mid, maxDepth, depth + 1);
-
-#pragma omp task firstprivate(values, tempValues, begin, mid, maxDepth, depth)
-		divideParallel(values, tempValues, mid + 1, end, maxDepth, depth + 1);
+		partialDivideParallel(values, tempValues, mid + 1, end, maxRecDepth, depth + 1);
 
 #pragma omp taskwait
 		merge(values, tempValues, begin, mid, end);

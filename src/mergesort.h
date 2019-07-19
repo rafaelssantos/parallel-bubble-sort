@@ -13,9 +13,9 @@ public:
 
 	virtual void sort(int* values, int n);
 
-	virtual void partialSort(int* values, int n, int maxDepth);
+	virtual void partialSort(int* values, int n, int maxRecDepth);
 
-	virtual void partialSortParallel(int* values, int n, int maxDepth);
+	virtual void partialSortParallel(int* values, int n, int maxRecDepth);
 
 
 protected:
@@ -23,9 +23,9 @@ protected:
 
 	void virtual divide(int* values, int* tempValues, int begin, int end);
 
-	void virtual divide(int* values, int* tempValues, int begin, int end, int maxDepth, int depth);
+	void virtual partialDivide(int* values, int* tempValues, int begin, int end, int maxRecDepth, int depth);
 
-	void virtual divideParallel(int* values, int* tempValues, int begin, int end, int maxDepth, int depth);
+	void virtual partialDivideParallel(int* values, int* tempValues, int begin, int end, int maxRecDepth, int depth);
 };
 
 #endif    // MERGESORT_H
