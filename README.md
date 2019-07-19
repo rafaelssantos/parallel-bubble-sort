@@ -19,8 +19,8 @@
 <p>No momento, há duas versões do algoritmo implementadas: </p>
 <ul>
 	<li>Serial</li>
-	<li>Paralela em OpenMP</li>
 	<li>Paralela em MPI</li>
+	<li>Paralela em OpenMP</li>
 </ul>
 
 
