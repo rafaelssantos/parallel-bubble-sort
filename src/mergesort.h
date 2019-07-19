@@ -11,23 +11,17 @@ public:
 
 	virtual ~MergeSort();
 
-	virtual void sort(int* values, int n);
+	void sort(int* values, int n);
 
-	virtual int* mergeParallel(int* A, int asize, int* B, int bsize);
+	void partialSort(int* values, int n, int maxRecDepth);
 
-	virtual void partialSort(int* values, int n, int maxDepth);
+	void merge(int* values, int* tempValues, int begin, int mid, int end);
 
-	virtual void partialSortParallel(int* values, int n, int maxDepth);
+	void divide(int* values, int* tempValues, int begin, int end);
 
+	void partialDivide(int* values, int* tempValues, int begin, int end, int maxRecDepth, int depth);
 
-protected:
-	void virtual merge(int* values, int* tempValues, int begin, int mid, int end);
-
-	void virtual divide(int* values, int* tempValues, int begin, int end);
-
-	void virtual divide(int* values, int* tempValues, int begin, int end, int maxDepth, int depth);
-
-	void virtual divideParallel(int* values, int* tempValues, int begin, int end, int maxDepth, int depth);
+	int* mergeParallel(int* partA, int partASize, int* partB, int partBSize);
 };
 
 #endif    // MERGESORT_H

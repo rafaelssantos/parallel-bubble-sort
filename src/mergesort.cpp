@@ -1,7 +1,5 @@
 #include "mergesort.h"
 
-#include <mpi.h>
-#include <cmath>
 #include <cstring>
 #include <iostream>
 
@@ -37,76 +35,18 @@ void MergeSort::sort(int* values, int n) {
 
 
 
-int* MergeSort::mergeParallel(int* A, int asize, int* B, int bsize) {
-	int ai, bi, ci, i;
-	int* C;
-	int csize = asize + bsize;
 
-	ai = 0;
-	bi = 0;
-	ci = 0;
-
-
-	C = new int[csize];
-	while ((ai < asize) && (bi < bsize)) {
-		if (A[ai] <= B[bi]) {
-			C[ci] = A[ai];
-			ci++;
-			ai++;
-		} else {
-			C[ci] = B[bi];
-			ci++;
-			bi++;
-		}
-	}
-
-	if (ai >= asize)
-		for (i = ci; i < csize; i++, bi++)
-			C[i] = B[bi];
-	else if (bi >= bsize)
-		for (i = ci; i < csize; i++, ai++)
-			C[i] = A[ai];
-
-	for (i = 0; i < asize; i++)
-		A[i] = C[i];
-	for (i = 0; i < bsize; i++)
-		B[i] = C[asize + i];
-
-
-	return C;
-}
-
-
-
-
-
-void MergeSort::partialSort(int* values, int n, int maxDepth) {
+void MergeSort::partialSort(int* values, int n, int maxRecDepth) {
 	int* tempValues = nullptr;
 
 	tempValues = new int[n];
 	memcpy(tempValues, values, n * sizeof(int));
 
-	divide(values, tempValues, 0, n - 1, maxDepth, 0);
+	partialDivide(values, tempValues, 0, n - 1, maxRecDepth, 0);
 
 
 	delete[] tempValues;
 	tempValues = nullptr;
-}
-
-
-
-
-void MergeSort::partialSortParallel(int* values, int n, int maxDepth) {
-	//	int* tempValues = nullptr;
-
-	//	tempValues = new int[n];
-	//	memcpy(tempValues, values, n * sizeof(int));
-
-	//	divideParallel(values, tempValues, 0, n - 1, maxDepth, 0);
-
-
-	//	delete[] tempValues;
-	//	tempValues = nullptr;
 }
 
 
@@ -167,41 +107,57 @@ void MergeSort::divide(int* values, int* tempValues, int begin, int end) {
 
 
 
-void MergeSort::divide(int* values, int* tempValues, int begin, int end, int maxDepth, int depth) {
-	if (begin < end && depth <= maxDepth) {
+void MergeSort::partialDivide(int* values, int* tempValues, int begin, int end, int maxRecDepth, int depth) {
+	if (begin < end && depth <= maxRecDepth) {
 		int mid = (begin + end) / 2;
-		divide(values, tempValues, begin, mid, maxDepth, depth + 1);
-		divide(values, tempValues, mid + 1, end, maxDepth, depth + 1);
+		partialDivide(values, tempValues, begin, mid, maxRecDepth, depth + 1);
+		partialDivide(values, tempValues, mid + 1, end, maxRecDepth, depth + 1);
 		merge(values, tempValues, begin, mid, end);
 	}
 }
 
 
 
-void MergeSort::divideParallel(int* values, int* tempValues, int begin, int end, int maxDepth, int depth) {
-	//	if (begin < end && depth <= maxDepth) {
-	//		int mid = (begin + end) / 2;
+int* MergeSort::mergeParallel(int* partA, int partASize, int* partB, int partBSize) {
+	int ai, bi, ci;
+	int* partC;
+	int partCSize = partASize + partBSize;
+
+	ai = 0;
+	bi = 0;
+	ci = 0;
 
 
-	//		int rank;
-	//		MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+	partC = new int[partCSize];
+	while ((ai < partASize) && (bi < partBSize)) {
+		if (partA[ai] <= partB[bi]) {
+			partC[ci] = partA[ai];
+			ci++;
+			ai++;
+		} else {
+			partC[ci] = partB[bi];
+			ci++;
+			bi++;
+		}
+	}
 
-	//		int nParts = static_cast<int>(pow(2, depth));
-	//		int partSize = n / nParts;
+	if (ai >= partASize) {
+		for (int i = ci; i < partCSize; i++, bi++) {
+			partC[i] = partB[bi];
+		}
+	} else if (bi >= partBSize) {
+		for (int i = ci; i < partCSize; i++, ai++) {
+			partC[i] = partA[ai];
+		}
+	}
+	for (int i = 0; i < partASize; i++) {
+		partA[i] = partC[i];
+	}
 
-	//		MPI_Scatter(values, partSize, MPI_INT, (tempValues + rank * partSize), partSize, MPI_INT, rank, MPI_COMM_WORLD);
+	for (int i = 0; i < partBSize; i++) {
+		partB[i] = partC[partASize + i];
+	}
 
-	//		if (rank < nParts) {
-	//			divideParallel(values, (tempValues + rank * partSize), begin, mid, maxDepth, depth + 1);
 
-	//			divideParallel(values, tempValues, mid + 1, end, maxDepth, depth + 1);
-
-	//			MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-
-	//			if (rank < pow(2, depth)) {
-	//				MPI_Barrier(MPI_COMM_WORLD);
-	//			}
-	//			merge(values, tempValues, begin, mid, end);
-	//		}
-	//	}
+	return partC;
 }

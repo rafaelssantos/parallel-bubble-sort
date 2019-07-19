@@ -9,9 +9,9 @@ public:
 
 	virtual ~HybridSort();
 
-	void sort(int* values, int n, int maxDepth);
+	void sort(int* values, int n, int mergeMaxRecDepth);
 
-	void sortParallel(int* values, int n, int maxDepth, int nThreads);
+	void sortParallel(int* values, int n, int mergeMaxRecDepth, int npForBubble);
 };
 
 #endif    // HYBRIDSORT_H
