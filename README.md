@@ -20,10 +20,11 @@
 <ul>
 	<li>Serial</li>
 	<li>Paralela em OpenMP</li>
+	<li>Paralela em MPI</li>
 </ul>
 
 
-<h2> Uso </h2>
+<h2> Uso em MPI</h2>
 <p> O programa deve ser executado por linha de comando. Por meio de passagem de parâmetros é possível alterar diversas opções, entre as quais: </p>
 <ul>
 	<li>[--file] ou [-f] <p>Nome base dos arquivos de entrada e saída. Veja que esta opção não define o nome completo do arquivo. Por exemplo, caso a opção "-f teste" seja passada, os  valores de gerados antes da ordenaca serão salvos no arquivo "testeinput.txt" e os de saída em "testeoutput.txt" </p></li>
@@ -35,6 +36,6 @@
 	<li>[--size] ou [-n] <p>Quantidade total de elementos do vetor. Por causa do algoritmo, caso esse valor não seja múltiplo do número definido para subvetores, o programa altera para o pŕoximo valor múltiplo.  MAX_INT é utilizdo nos valores adicionais. Após o processamento, esses valores são descartados no resultado.</p></li>
 	<li>[--threads] ou [-t] <p>Número de threads (processos no caso do MPI) do algoritmo paralelo. Esta opção só tem efeito caso a opção do algoritmo paralelo tenha sido definida.</p></li>
 	<li>[--verbose] ou  [-v] <p>Exibe os valores de entrada e saída durante a execução do programa.</p></li>
-	<li>*Nível de recursão do merge sort é definido de acordo com o número de processos instanciados (log2 NP).</p></li>
+	<li>*Nível de recursão do merge sort no MPI é definido de acordo com o número de processos instanciados (log2 NP).</p></li>
 </ul>
 

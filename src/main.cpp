@@ -81,8 +81,6 @@ int main(int argc, char* argv[]) {
 				readInput = true;
 			} else if (option.compare("--size") == 0 || option.compare("-n") == 0) {
 				n = atoi(argv[++op]);
-			} else if (option.compare("--merge-depth") == 0 || option.compare("-M") == 0) {
-				mergeDepth = atoi(argv[++op]);
 			} else if (option.compare("--maximum") == 0 || option.compare("-m") == 0) {
 				max = atoi(argv[++op]) + 1;
 			} else if (option.compare("--log") == 0 || option.compare("-l") == 0) {
@@ -97,7 +95,6 @@ int main(int argc, char* argv[]) {
 				cout << "[--input] or       [-i] = Set input file path and also indicates that input values will be read\n";
 				cout << "[--log] or         [-l] = Enable log\n";
 				cout << "[--maximum] or     [-m] = Maximum value random generated\n";
-				cout << "[--merge-depth] or [-M] = Merge depth\n";
 				cout << "[--parallel] or    [-p] = Choose the parallle version fo the algorithm\n";
 				cout << "[--size] or        [-n] = Number of random generated values\n";
 				cout << "[--threads] or     [-t] = Number of executions for thread\n";
@@ -106,7 +103,10 @@ int main(int argc, char* argv[]) {
 				return 0;
 			}
 		}
+
+		mergeDepth = log2(worldSize);
 	}
+	MPI_Bcast(&mergeDepth, 1, MPI_INT, 0, MPI_COMM_WORLD);
 	MPI_Bcast(&parallel, 1, MPI_CXX_BOOL, 0, MPI_COMM_WORLD);
 
 
