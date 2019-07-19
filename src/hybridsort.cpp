@@ -48,7 +48,7 @@ void HybridSort::sort(int* values, int n, int mergeMaxRecDepth) {
 
 
 
-void HybridSort::sortParallel(int* values, int n, int mergeMaxRecDepth, int npForBubble) {
+void HybridSort::sortParallel(int* values, int n, int, int npForBubble) {
 	int nPerPart = n / npForBubble;
 	int rank;
 	int worldSize;
@@ -98,19 +98,23 @@ void HybridSort::sortParallel(int* values, int n, int mergeMaxRecDepth, int npFo
 	int partBSize;
 	MPI_Status status;
 
+
 	while (pStride < worldSize) {
 		if (rank % (2 * pStride) == 0) {
 			if (rank + pStride < worldSize) {
 				MPI_Recv(&partBSize, 1, MPI_INT, rank + pStride, 0, MPI_COMM_WORLD, &status);
-				int* sideB = new int[partBSize];
+				int sideB[partBSize];
+
 				MPI_Recv(sideB, partBSize, MPI_INT, rank + pStride, 0, MPI_COMM_WORLD, &status);
+
 				MergeSort merge;
+				int* sideTemp = sideA;
+
 				sideA = merge.mergeParallel(sideA, partASize, sideB, partBSize);
 				partASize = partASize + partBSize;
 
-				//				delete[] localValuesA;
-				//				delete[] localValuesB;
-				//				localValuesA = mergedValues;
+				delete[] sideTemp;
+				sideTemp = nullptr;
 			}
 		} else {
 			int nearRank = rank - pStride;
