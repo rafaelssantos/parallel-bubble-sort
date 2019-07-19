@@ -136,10 +136,10 @@ void HybridSort::sortParallel(int* values, int n, int, int npForBubble) {
 	}
 
 
-	if (rank == 0) {
-		std::cout << "N =" << n << "\n";
-		for (auto i = 0; i < n; i++) {
-			std::cout << values[i] << "\n";
-		}
-	}
+	//	if (rank == 0) {
+	//		std::cout << "NN =" << n << "\n";
+	//		for (auto i = 0; i < n; i++) {
+	//			std::cout << i << " " << values[i] << "\n";
+	//		}
+	//	}
 }

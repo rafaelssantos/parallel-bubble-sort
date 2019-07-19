@@ -33,11 +33,11 @@ void messageError() {
 
 
 int main(int argc, char* argv[]) {
-	int max = 1000;         // Valor máximo gerado
-	int n = 320;            // Número total de elementos
-	int nThreads = 16;      // Número de threads
-	int mergeDepth = 5;     // Nível de recursão merge parcial. Veja 2^5 = 32 (Vetores)
-	int parallel = true;    // Execução do algoritmo paralelo
+	int max = 1000;           // Valor máximo gerado
+	int n = 320;              // Número total de elementos
+	int nProcess = 32;        // Número de threads
+	int mergeDepth = 5;       // Nível de recursão merge parcial. Veja 2^5 = 32 (Vetores)
+	bool parallel = false;    // Execução do algoritmo paralelo
 
 	bool verbose = false;      // True para imprimir os vetores. False, caso contrário
 	bool readInput = false;    // True para ler valores de entrada. False, para gerar aleatórios
@@ -63,50 +63,53 @@ int main(int argc, char* argv[]) {
 
 	/******************************* Opções ***************************************/
 	/******************************************************************************/
-	//	if (rank == 0) {
-	//		if (argc == 1) {
-	//			messageError();
-	//			MPI_Finalize();
-	//			return 0;
-	//		}
-	//		for (auto op = 1; op < argc; op++) {
-	//			string option(argv[op]);
+	if (rank == 0) {
+		if (argc == 1) {
+			messageError();
+			MPI_Finalize();
+			return 0;
+		}
+		for (auto op = 1; op < argc; op++) {
+			string option(argv[op]);
 
-	//			if (option.compare("--verbose") == 0 || option.compare("-v") == 0) {
-	//				verbose = true;
-	//			} else if (option.compare("--file") == 0 || option.compare("-f") == 0) {
-	//				baseFilePath = argv[++op];
-	//			} else if (option.compare("--input") == 0 || option.compare("-i") == 0) {
-	//				inputFilePath = argv[++op];
-	//				readInput = true;
-	//			} else if (option.compare("--size") == 0 || option.compare("-n") == 0) {
-	//				n = atoi(argv[++op]);
-	//			} else if (option.compare("--merge-depth") == 0 || option.compare("-M") == 0) {
-	//				mergeDepth = atoi(argv[++op]);
-	//			} else if (option.compare("--maximum") == 0 || option.compare("-m") == 0) {
-	//				max = atoi(argv[++op]) + 1;
-	//			} else if (option.compare("--log") == 0 || option.compare("-l") == 0) {
-	//				Logger::instance().setEnable(true);
-	//			} else if (option.compare("--threads") == 0 || option.compare("-t") == 0) {
-	//				nThreads = atoi(argv[++op]);
-	//			} else if (option.compare("--parallel") == 0 || option.compare("-p") == 0) {
-	//				parallel = true;
-	//			} else if (option.compare("--help") == 0 || option.compare("-h") == 0) {
-	//				cout << "[OPTION] = description\n";
-	//				cout << "[--file] or        [-f] = Base file path for input and output and generated values\n";
-	//				cout << "[--input] or       [-i] = Set input file path and also indicates that input values will be read\n";
-	//				cout << "[--log] or         [-l] = Enable log\n";
-	//				cout << "[--maximum] or     [-m] = Maximum value random generated\n";
-	//				cout << "[--merge-depth] or [-M] = Merge depth\n";
-	//				cout << "[--parallel] or    [-p] = Choose the parallle version fo the algorithm\n";
-	//				cout << "[--size] or        [-n] = Number of random generated values\n";
-	//				cout << "[--threads] or     [-t] = Number of executions for thread\n";
-	//				cout << "[--verbose] or     [-v] = Display data\n";
-	//				MPI_Finalize();
-	//				return 0;
-	//			}
-	//		}
-	//	}
+			if (option.compare("--verbose") == 0 || option.compare("-v") == 0) {
+				verbose = true;
+			} else if (option.compare("--file") == 0 || option.compare("-f") == 0) {
+				baseFilePath = argv[++op];
+			} else if (option.compare("--input") == 0 || option.compare("-i") == 0) {
+				inputFilePath = argv[++op];
+				readInput = true;
+			} else if (option.compare("--size") == 0 || option.compare("-n") == 0) {
+				n = atoi(argv[++op]);
+			} else if (option.compare("--merge-depth") == 0 || option.compare("-M") == 0) {
+				mergeDepth = atoi(argv[++op]);
+			} else if (option.compare("--maximum") == 0 || option.compare("-m") == 0) {
+				max = atoi(argv[++op]) + 1;
+			} else if (option.compare("--log") == 0 || option.compare("-l") == 0) {
+				Logger::instance().setEnable(true);
+			} else if (option.compare("--threads") == 0 || option.compare("-t") == 0) {
+				nProcess = atoi(argv[++op]);
+			} else if (option.compare("--parallel") == 0 || option.compare("-p") == 0) {
+				parallel = true;
+			} else if (option.compare("--help") == 0 || option.compare("-h") == 0) {
+				cout << "[OPTION] = description\n";
+				cout << "[--file] or        [-f] = Base file path for input and output and generated values\n";
+				cout << "[--input] or       [-i] = Set input file path and also indicates that input values will be read\n";
+				cout << "[--log] or         [-l] = Enable log\n";
+				cout << "[--maximum] or     [-m] = Maximum value random generated\n";
+				cout << "[--merge-depth] or [-M] = Merge depth\n";
+				cout << "[--parallel] or    [-p] = Choose the parallle version fo the algorithm\n";
+				cout << "[--size] or        [-n] = Number of random generated values\n";
+				cout << "[--threads] or     [-t] = Number of executions for thread\n";
+				cout << "[--verbose] or     [-v] = Display data\n";
+				MPI_Finalize();
+				return 0;
+			}
+		}
+	}
+	MPI_Bcast(&parallel, 1, MPI_CXX_BOOL, 0, MPI_COMM_WORLD);
+
+
 
 
 	/******************************* Processamento ********************************/
@@ -166,10 +169,10 @@ int main(int argc, char* argv[]) {
 
 
 	if (parallel) {
-		SortManager::instance().sort(SortAlgorithmType::PARALLEL_HYBRID, output, nExp, mergeDepth, nThreads);
+		SortManager::instance().sort(SortAlgorithmType::PARALLEL_HYBRID, output, nExp, mergeDepth, nProcess);
 	} else {
 		if (rank == 0) {
-			SortManager::instance().sort(SortAlgorithmType::SERIAL_HYBRID, output, nExp, mergeDepth, nThreads);
+			SortManager::instance().sort(SortAlgorithmType::SERIAL_HYBRID, output, nExp, mergeDepth, nProcess);
 		}
 	}
 
