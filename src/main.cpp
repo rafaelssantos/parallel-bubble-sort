@@ -165,7 +165,7 @@ int main(int argc, char* argv[]) {
 	}
 
 
-
+	MPI_Bcast(&n, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
 
 	if (parallel) {
