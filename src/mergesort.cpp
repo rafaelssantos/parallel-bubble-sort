@@ -144,10 +144,10 @@ void MergeSort::partialDivideParallel(int* values, int* tempValues, int begin, i
 	if (begin < end && depth <= maxRecDepth) {
 		int mid = (begin + end) / 2;
 
-#pragma omp task firstprivate(values, tempValues, begin, mid, maxDepth, depth)
+#pragma omp task firstprivate(values, tempValues, begin, mid, maxRecDepth, depth)
 		partialDivideParallel(values, tempValues, begin, mid, maxRecDepth, depth + 1);
 
-#pragma omp task firstprivate(values, tempValues, begin, mid, maxDepth, depth)
+#pragma omp task firstprivate(values, tempValues, begin, mid, maxRecDepth, depth)
 		partialDivideParallel(values, tempValues, mid + 1, end, maxRecDepth, depth + 1);
 
 #pragma omp taskwait

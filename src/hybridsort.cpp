@@ -53,7 +53,7 @@ void HybridSort::sortParallel(int* values, int n, int mergeMaxRecDepth, int thre
 	Logger::instance().start(0);
 	Logger::instance().start(1);
 
-#pragma omp parallel num_threads(nThreads)
+#pragma omp parallel num_threads(threadCount)
 	{
 		for (auto i = omp_get_thread_num() * partCountPerThread; i < (omp_get_thread_num() + 1) * partCountPerThread; i++) {
 			BubbleSort bubble;
