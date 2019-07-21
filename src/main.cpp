@@ -106,6 +106,7 @@ int main(int argc, char* argv[]) {
 
 		mergeDepth = log2(worldSize);
 	}
+
 	MPI_Bcast(&mergeDepth, 1, MPI_INT, 0, MPI_COMM_WORLD);
 	MPI_Bcast(&parallel, 1, MPI_CXX_BOOL, 0, MPI_COMM_WORLD);
 
@@ -117,8 +118,7 @@ int main(int argc, char* argv[]) {
 
 	int* input = nullptr;     // Elementos de entrada
 	int* output = nullptr;    // Elementos ordenados
-
-	int nExp = ValuesManager::instance().calcExpToMultiple(n, static_cast<int>(pow(2, mergeDepth)));
+	int nExp;
 
 	if (rank == 0) {
 		if (n == 0 && inputFilePath.empty()) {
@@ -131,21 +131,23 @@ int main(int argc, char* argv[]) {
 			if (verbose) {
 				cout << ">> Reading values......................" << flush;
 			}
+			std::cout << inputFilePath << "\n";
 			int* tempInput = ValuesManager::instance().read(inputFilePath, &n);
-			input = ValuesManager::instance().expandToMultiple(tempInput, n, nExp);
-			delete tempInput;
+			cout << "Processing...\n";
+
+			input = ValuesManager::instance().expandToMultiple(tempInput, n, &nExp, static_cast<int>(pow(2, mergeDepth)));
+
+			delete[] tempInput;
 		} else {
 			if (verbose) {
 				cout << ">> Generating random values............" << flush;
 			}
 			int* tempInput = ValuesManager::instance().generateRandom(n, max);
-			input = ValuesManager::instance().expandToMultiple(tempInput, n, nExp);
-			delete tempInput;
+			input = ValuesManager::instance().expandToMultiple(tempInput, n, &nExp, static_cast<int>(pow(2, mergeDepth)));
+			delete[] tempInput;
 		}
 
-
-
-		ValuesManager::instance().save(baseFilePath + "input.txt", input, n);
+		//		ValuesManager::instance().save(baseFilePath + "input.txt", input, n);
 
 		if (verbose) {
 			cout << "DONE\n" << flush;
@@ -164,8 +166,10 @@ int main(int argc, char* argv[]) {
 		}
 	}
 
-
+	MPI_Barrier(MPI_COMM_WORLD);
 	MPI_Bcast(&n, 1, MPI_INT, 0, MPI_COMM_WORLD);
+	MPI_Bcast(&nExp, 1, MPI_INT, 0, MPI_COMM_WORLD);
+
 
 
 	if (parallel) {

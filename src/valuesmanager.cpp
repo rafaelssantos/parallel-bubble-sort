@@ -80,7 +80,7 @@ int* ValuesManager::generateRandom(int n, int max) {
 
 void ValuesManager::print(const int* values, int n) {
 	for (auto i = 0; i < n; i++) {
-		cout << values[i] << "\n";
+		cout << i << " " << values[i] << "\n";
 	}
 }
 
@@ -119,7 +119,6 @@ int* ValuesManager::read(string filePath, int* n) {
 		file >> value;
 		tempValues.push_back(value);
 	}
-
 	int* values = new int[tempValues.size()];
 
 	for (auto i = 0u; i < tempValues.size(); i++) {
@@ -136,25 +135,18 @@ int* ValuesManager::read(string filePath, int* n) {
 
 
 
-int ValuesManager::calcExpToMultiple(int n, int factor) {
-	int expN;
-
+int* ValuesManager::expandToMultiple(const int* values, int n, int* expN, int factor) {
+	int* expValues = nullptr;
 	if (n % factor == 0) {
-		expN = n;
+		*expN = n;
 	} else {
-		expN = static_cast<int>(ceil((1.0f * n) / factor)) * factor;
+		*expN = static_cast<int>(ceil((1.0f * n) / factor)) * factor;
 	}
 
-	return expN;
-}
-
-
-
-int* ValuesManager::expandToMultiple(const int* values, int n, int expN) {
-	int* expValues = new int[expN];
+	expValues = new int[*expN];
 	memcpy(expValues, values, sizeof(int) * n);
 
-	for (auto i = n; i < expN; i++) {
+	for (auto i = n; i < *expN; i++) {
 		expValues[i] = std::numeric_limits<int>::max();
 	}
 
