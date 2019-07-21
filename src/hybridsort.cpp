@@ -80,6 +80,12 @@ void HybridSort::sortParallel(int* values, int n, int, int npForBubble) {
 		int localValues[nPerPart];
 
 		MPI_Scatterv(values, sendCounts, sendDispls, MPI_INT, localValues, nPerPart, MPI_INT, 0, MPI_COMM_WORLD);
+
+		if (rank == 0) {
+			Logger::instance().start(0);
+			Logger::instance().start(1);
+		}
+
 		BubbleSort bubble;
 		bubble.sort(localValues, nPerPart);
 
@@ -93,6 +99,10 @@ void HybridSort::sortParallel(int* values, int n, int, int npForBubble) {
 	MPI_Scatter(values, partASize, MPI_INT, sideA, partASize, MPI_INT, 0, MPI_COMM_WORLD);
 	MPI_Gather(sideA, partASize, MPI_INT, values, partASize, MPI_INT, 0, MPI_COMM_WORLD);
 
+	if (rank == 0) {
+		Logger::instance().stop(1, "Bubble");
+		Logger::instance().start(1);
+	}
 
 	int pStride = 1;
 	int partBSize;
@@ -133,13 +143,8 @@ void HybridSort::sortParallel(int* values, int n, int, int npForBubble) {
 
 		delete[] sideA;
 		sideA = nullptr;
+
+		Logger::instance().stop(1, "Merge");
+		Logger::instance().stop(0, "Total");
 	}
-
-
-	//	if (rank == 0) {
-	//		std::cout << "NN =" << n << "\n";
-	//		for (auto i = 0; i < n; i++) {
-	//			std::cout << i << " " << values[i] << "\n";
-	//		}
-	//	}
 }
