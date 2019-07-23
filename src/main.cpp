@@ -106,7 +106,8 @@ int main(int argc, char* argv[]) {
 
 		mergeDepth = log2(worldSize);
 	}
-
+	MPI_Bcast(&max, 1, MPI_INT, 0, MPI_COMM_WORLD);
+	MPI_Bcast(&nProcess, 1, MPI_INT, 0, MPI_COMM_WORLD);
 	MPI_Bcast(&mergeDepth, 1, MPI_INT, 0, MPI_COMM_WORLD);
 	MPI_Bcast(&parallel, 1, MPI_CXX_BOOL, 0, MPI_COMM_WORLD);
 
@@ -131,9 +132,7 @@ int main(int argc, char* argv[]) {
 			if (verbose) {
 				cout << ">> Reading values......................" << flush;
 			}
-			std::cout << inputFilePath << "\n";
 			int* tempInput = ValuesManager::instance().read(inputFilePath, &n);
-			cout << "Processing...\n";
 
 			input = ValuesManager::instance().expandToMultiple(tempInput, n, &nExp, static_cast<int>(pow(2, mergeDepth)));
 
@@ -147,7 +146,7 @@ int main(int argc, char* argv[]) {
 			delete[] tempInput;
 		}
 
-		//		ValuesManager::instance().save(baseFilePath + "input.txt", input, n);
+		ValuesManager::instance().save(baseFilePath + "input.txt", input, n);
 
 		if (verbose) {
 			cout << "DONE\n" << flush;
